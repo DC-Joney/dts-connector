@@ -1,0 +1,61 @@
+com:
+  kkb:
+    mapping:
+      im-user:
+        topic: im_user_v1
+        table: im_user
+
+      im-friend:
+        topic: im_friend_v1
+        table: im_friend
+
+      im-group:
+        topic: im_group_v1
+        table: im_group
+
+      im-group-member:
+        topic: im_group_member_v1
+        table: im_group_member
+
+      snapshot-im-user:
+        topic: snapshot_im_user_v1
+        table: snapshot_im_user
+
+      snapshot-im-friend:
+        topic: snapshot_im_friend_v1
+        table: snapshot_im_friend
+
+    kafka:
+      producer:
+        bootstrap-servers: ["192.168.100.125:9092","192.168.100.126:9092","192.168.100.127:9092"]
+#        bootstrap-servers: ["192.168.24.251:9092","192.168.24.252:9092","192.168.24.1:9092"]
+        retries: 3
+
+      consumer:
+        topic-name: cn_beijing_i_2ze072y75i2by9pcry6c_43306_test_version2
+        bootstrap-servers: dts-cn-beijing.aliyuncs.com:18001
+        security:
+          protocol: SASL_PLAINTEXT
+        sasl:
+          group-id:  dtsy3t11hqc19otb8s
+          user-name: KkbScrmImData
+          password: KkbScrmImData01
+          sasl-mechanism: PLAIN
+        enable-auto-commit: false
+        group-id: kkb-scrm-im-data
+        max-poll-records: 200
+        session-timeout-ms: 15000
+        key-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+        value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+      listener:
+        ack-mode: manual
+        concurrency: 1
+        poll-time-out: 200
+        type: single
+
+      admin:
+        bootstrap-servers: ["192.168.100.125:9092","192.168.100.126:9092","192.168.100.127:9092"]
+        auto-create-topic: false
+        instance-count: 4
+

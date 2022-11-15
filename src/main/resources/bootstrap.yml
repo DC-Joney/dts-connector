@@ -1,0 +1,63 @@
+server:
+  port: 8080
+spring:
+  profiles:
+    active: dev
+  application:
+    name: kkb-scrm-dts-connector
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      config:
+        file-extension: yml
+        namespace: kkb_scrm
+        group: DTS_GROUP
+        config-retry-time: 3
+        max-retry: 5
+        name: dts-connector
+
+# 用于 kubernetes readiness 检查
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: [ '*' ]
+
+---
+spring:
+  profiles: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: http://devkmos-inner.kaikeba.com:20075
+
+logging:
+  config: http://devkmos-inner.kaikeba.com:20075/nacos/v1/cs/configs?group=DEFAULT_GROUP&tenant=826b6eb2-bf9d-43fe-b966-9a51be73ab21&dataId=logback.xml
+
+---
+spring:
+  profiles: test
+  cloud:
+    nacos:
+      config:
+        server-addr: nacos-headless.kkb-base-test.svc.cluster.local:8848
+
+logging:
+  config: http://nacos-headless.kkb-base-test.svc.cluster.local:8848/nacos/v1/cs/configs?group=DEFAULT_GROUP&tenant=e203b840-021b-43c0-896d-a2c1f1395f95&dataId=logback.xml
+
+
+---
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      config:
+        server-addr: nacos-headless.kkb-base-prod.svc.cluster.local:8848
+
+logging:
+  config: http://nacos-headless.kkb-base-prod.svc.cluster.local:8848/nacos/v1/cs/configs?group=DEFAULT_GROUP&tenant=4ac6708f-cce6-4ff2-ab50-4bb4381788f7&dataId=logback.xml
+
